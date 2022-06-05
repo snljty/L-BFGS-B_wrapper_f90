@@ -1,0 +1,138 @@
+A wrapper of L-BFGS-B local minimization routine
+
+subroutine lbfgsb(n, x, func_sub, grad_sub, print_sub, info, &
+   func_tol, grad_tol, num_corr, max_cyc, bound_stat, x_lower, x_upper, print_level)
+
+A wrapper of L-BFGS-B
+The original version can be found on http://users.iems.northwestern.edu/~nocedal/software.html#lbfgs
+
+This subroutine uses L-BFGS-B method to minimize the value of a function by adjusting the variables,
+with the gradient provided.
+
+variables:
+
+n is an integer variable.
+  On entry n is the dimension of variables, should be positive.
+  On exit n is not changed.
+
+x is a double precision array of dimension n.
+  On entry x is the initial guess.
+    the memory of x should be allocated before.
+  On exit x is the final value of variables, and should be the converged values of variables if
+    info == 0
+
+func_sub is a subroutine to computes function value of the function to be minimized, should have the
+  syntax func_sub(n, x, f), where
+
+    n is an integer.
+      On entry n is the dimension of variables.
+      On exit n is not changed.
+
+    x is a double precision array of dimension n.
+      On entry x is the current variables.
+      On exit x is not changed.
+
+    f is a double pricision.
+      On entry f is not specified.
+      On exit f is the function value related to the current variables.
+
+grad_sub is a subroutine to computes gradients of the function to be minimized, should have the
+  syntax grad_sub(n, x, g), where
+
+    n is an integer.
+      On entry n is the dimension of variables.
+      On exit n is not changed.
+
+    x is a double precision arrray of dimension n.
+      On entry x is the current variables.
+      On exit x is not changed.
+
+    g is an array double pricision of dimension n.
+      On entry g is not specified, and can be assumed to be already allocated.
+      On exit g is the gradient of the function related to the current variables.
+
+print_sub is a subroutine to print intermediate information, shoule have the syntax
+  print_sub(n, x, f, g, task, ind_cyc), where
+
+    n is an integer.
+      On entry n is the dimension of variables.
+      On exit n is not changed.
+
+    x is a double precision array of dimension n.
+      On entry x is the current variables.
+      On exit x is not changed.
+
+    f is a double pricision.
+      On entry f is the current function value.
+      On exit f is not changed.
+
+    g is a double pricision array of dimension n.
+      On entry g is the current function gradient.
+      On exit g is not changed.
+
+    task is a character string of length 60.
+      On entry task is the name of the current task.
+      On exit task is not changed.
+
+    ind_cyc is an integer.
+      On entry ind_cyc is the index of the current cycle.
+      On exit ind_cyc is not changed.
+
+info is an integer.
+  On entry info is not specified.
+  On exit info indicates the status of exit status of L-BFGS-B algorithm, where
+     == 0: exited normally.
+      > 0: exited with an internal error occured.
+      < 0: did not converge within the specified max amount of loops.
+
+func_tol is a double pricision, and it is optional.
+  On entry func_tol is the tolerance related to the change of the function value.
+    If not specified, the default value of func_tol is 1.d-7.
+  On exit func_tol is not changed.
+
+grad_tol is a double pricision, and it is optional.
+  On entry grad_tol is the tolerance related to the maximum gradient.
+    If not specified, the default value of grad_tol is 1.d-5.
+  On exit grad_tol is not changed.
+
+num_corr is an integer, and it is optional.
+  On entry num_corr is the maximum number of variable metric corrections used to define the limited
+    memory matrix. The space complexity is O(num_corr**2) when m is large. It is usually between 3
+    and 10.
+    If not specified, the default value of num_corr is 5.
+  On exit num_corr is not changed.
+
+max_cyc is an integer, and it is optional.
+   On entry max_cyc is the maximum allowed amount of loops, if the number of cycles is greater than
+     max_cyc, the algorithm will exit without a converged solution. If is is zero or negative,
+     the algorithm will never stop until it is converged.
+     If not specified, the default value of max_cyc is 0.
+
+bound_stat is an integer array of dimension n, and it is optional.
+  On entry bound_stat(i) == 0: x(i) is unbounded,
+                            1: x(i) has only a lower bound,
+                            2: x(i) has both lower and upper bound, and
+                            3: x(i) has only an upper bound.
+    If not specified, the default values of bound_stat are 0.
+ On exit bound_stat is not changed.
+
+x_lower is a double precision array of dimension n, and it is optional.
+  On entry if bound_stat(i) == 1 or 2, then x_lower is the lower bound of x(i), otherwise useless.
+    If not specified, the default values of x_lower are -1.d0. If bound_stat == 0 or 3, then x_lower
+    does not need to be specified.
+  On exit x_lower is not changed.
+
+x_upper is a double precision array of dimension n, and it is optional.
+  On entry if bound_stat(i) == 2 or 3, then x_upper is the upper bound of x(i), otherwise useless.
+    If not specified, the default values of x_upper are 1.d0. If bound_stat == 0 or 1, then x_upper
+    does not need to be specified.
+  On exit x_upper is not changed.
+
+print_level is an integer.
+  On entry print_level controls the verbose level of internal printing of subroutine setulb in
+    original L-BFGS-B code, the larger print_level is, the more verbose it is. For details please
+    see the comments of iprint of the original code. If print_level is positive, a file with name
+    "iterate.dat" will be created including the detail information. If print_level is negative,
+    then it will prints nothing.
+    If not specified, the default value of print_level is -1.
+  On exit print_level is not changed.
