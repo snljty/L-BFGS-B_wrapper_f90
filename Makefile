@@ -18,7 +18,7 @@ test.exe: test.obj all
 	@echo Linking program $@ against $^ ...
 	$(FLINKER) -o $@ $< -L . -l LBFGSB_wrapper -static $(OPTS)
 
-test.obj: test.f90 LBFGSB_wrapper.mod
+test.obj: test.F90 LBFGSB_wrapper.mod
 	@echo Compiling $@ from $< ...
 	$(FC) -o $@ -c $< $(OPTS) -cpp -I .
 
@@ -28,7 +28,7 @@ libLBFGSB_wrapper.a: LBFGSB_wrapper.obj LBFGSB.obj linpack.obj blas.obj
 
 LBFGSB_wrapper.mod: LBFGSB_wrapper.obj
 
-LBFGSB_wrapper.obj: LBFGSB_wrapper.f90
+LBFGSB_wrapper.obj: LBFGSB_wrapper.F90
 	@echo Compiling $@ from $< ...
 	$(FC) -o $@ -c $< $(OPTS) -cpp
 
